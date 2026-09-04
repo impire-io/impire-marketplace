@@ -22,7 +22,7 @@ Run `hits version`. This skill assumes a v0.1.x client. If the command is missin
 ## Setup
 
 - **Global flags go before the command, command flags after the leading `<id>`.**
-- `--context <name>` selects the context the service runs on: hits' own context first (`~/.config/hits/context/<name>.json` — the same JSON schema as a nats CLI context, plus an optional `oauth` block with `issuer` and `client_id`), else the nats CLI's context of that name. A name must live in only one of the two directories. `hits ping` verifies the service is reachable before anything else.
+- `--context <name>` selects a **hits context** — a hits-owned document at `~/.config/hits/context/<name>.json`: the NATS connection nested under a `nats` key (the nats CLI's context schema, unchanged), plus optional hits blocks like `oauth` (`issuer` and `client_id`). hits never reads the nats CLI's contexts at connect time; bring one over once with `hits context import <name>`. The `hits context` family (`ls`, `add`, `import`, `edit`, `rm`, `select`) manages the directory — `select` just records the default in the config file. `hits ping` verifies the service is reachable before anything else.
 - An `oauth` context (deployments whose NATS auth callout accepts IDP access tokens) needs one interactive login before anything connects: `hits auth login --context <name>` — device flow, open the URL, enter the code. Refresh is transparent afterward, across reconnects too; `hits auth status` shows where things stand, `hits auth logout` clears the cached tokens.
 - Every write carries an **actor**: a stable lowercase handle (`daan`, `claude`) from `--actor`, `$HITS_ACTOR`, or `defaults.actor` in `~/.config/hits/config.json` (which also takes `defaults.context`). Set one before writing; commands without one are rejected.
 - `--json` for machine-readable output — prefer it when you are parsing.
@@ -49,7 +49,8 @@ Items are `bug` | `task` | `improvement`. Statuses: `open → diagnosing → loc
 | Symptom | Fix |
 |---|---|
 | `command not found: hits` | Install it — see *First: check the binary* above. |
-| `hits ping` hangs or errors | No service on that context. Start one with `hits up --context <name>`, or check the context with `nats context ls`. |
+| `hits ping` hangs or errors | No service on that context. Start one with `hits up --context <name>`, or check the context with `hits context ls`. |
+| `no context "<name>"` | The name has no file in hits' context directory — `hits context add <name>` creates one, `hits context import <name>` brings a nats CLI context over. |
 | `no token for context "<name>"` | An `oauth` context with no login yet — run `hits auth login --context <name>`. |
 | A write is rejected for a missing actor | Set `--actor` or `$HITS_ACTOR` to a stable lowercase handle. |
 | `create --type task` is rejected | Tasks must be born located: add `--project <slug>`, registering the slug first if needed (`hits project register`). |

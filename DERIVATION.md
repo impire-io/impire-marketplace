@@ -6,5 +6,5 @@ The upstream sources each skill is derived from, per `hits-hq` playbook 06 (buil
 |---|---|---|---|
 | `skills/hits-cli` | `hits-hq` | `02-DESIGN/item-model.md` | Item types, statuses and lifecycle, invariants, trail and link semantics, projects and actors. |
 | `skills/hits-cli` | `hits-hq` | `02-DESIGN/hits-up.md` | What `hits up` runs and its context/connection semantics. |
-| `skills/hits-cli` | `hits-hq` | `02-DESIGN/idp-auth.md` | hits contexts (nats schema + oauth block), the auth verb family, config defaults, and the exchange-vs-validation dividing line. |
+| `skills/hits-cli` | `hits-hq` | `02-DESIGN/idp-auth.md` | hits contexts (standalone documents: nats subtree + oauth block), the context and auth verb families, config defaults, and the exchange-vs-validation dividing line. |
 | `skills/hits-cli` | `hits` | releases, `Formula` via `impire-io/homebrew-tap` | Distribution channels for the binary (brew tap, release tarballs, `go install`). Flag signatures are pointed at (`hits <command> -h`), never restated. |
