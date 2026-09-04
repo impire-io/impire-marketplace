@@ -13,7 +13,7 @@ HITS is a headless, agent-native issue tracker running on NATS; the `hits` binar
 
 ## First: check the binary
 
-Run `hits version`. This skill assumes a v0.1.x client. If the command is missing, install it:
+Run `hits version`. This skill assumes a client **newer than v0.2.0**: standalone hits contexts and the `hits context` verbs. A v0.2.0-or-older client resolves nats CLI contexts directly and lacks those verbs — upgrade rather than adapt. If the command is missing, install it:
 
 - **Homebrew (macOS/Linux):** `brew install impire-io/tap/hits`
 - **Prebuilt binaries:** https://github.com/impire-io/hits/releases — darwin, linux, and windows tarballs for amd64 and arm64
