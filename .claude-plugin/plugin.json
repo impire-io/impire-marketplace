@@ -1,0 +1,13 @@
+{
+  "name": "hits",
+  "displayName": "HITS",
+  "description": "Operate HITS — headless, agent-native issue tracking — through the hits CLI.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Impire",
+    "url": "https://github.com/impire-io"
+  },
+  "homepage": "https://github.com/impire-io/hits",
+  "repository": "https://github.com/impire-io/impire-marketplace",
+  "keywords": ["hits", "issue-tracking", "nats", "cli"]
+}

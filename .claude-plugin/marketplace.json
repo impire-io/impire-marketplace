@@ -1,0 +1,21 @@
+{
+  "$schema": "https://code.claude.com/schemas/marketplace.json",
+  "name": "impire",
+  "description": "Agent skills and plugins for Impire products, starting with HITS — headless, agent-native issue tracking.",
+  "owner": {
+    "name": "Impire",
+    "url": "https://github.com/impire-io"
+  },
+  "plugins": [
+    {
+      "name": "hits",
+      "source": "./",
+      "description": "Operate HITS — headless, agent-native issue tracking — through the hits CLI.",
+      "version": "0.1.0",
+      "homepage": "https://github.com/impire-io/hits",
+      "repository": "https://github.com/impire-io/impire-marketplace",
+      "keywords": ["hits", "issue-tracking", "nats", "cli"],
+      "category": "productivity"
+    }
+  ]
+}
