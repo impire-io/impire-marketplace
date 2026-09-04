@@ -9,5 +9,6 @@
   },
   "homepage": "https://github.com/impire-io/hits",
   "repository": "https://github.com/impire-io/impire-marketplace",
+  "license": "LicenseRef-Sustainable-Use-1.0",
   "keywords": ["hits", "issue-tracking", "nats", "cli"]
 }

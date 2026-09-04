@@ -1,6 +1,7 @@
 ---
 name: hits-cli
 description: Operate the HITS tracker with the `hits` CLI — file items, move them through the lifecycle, claim work, append notes, and query by text, meaning, or graph. Use when asked to create, update, or look up items in a HITS instance, or when working an issue tracked in hits.
+license: Sustainable Use License 1.0 (see LICENSE at the repo root)
 metadata:
   author: impire
   version: "0.1.0"
