@@ -10,26 +10,28 @@ Agent skills and plugins for Impire products. Skills follow the open [Agent Skil
 npx skills add impire-io/impire-marketplace
 ```
 
-**Claude Code**, as a plugin:
+This installs the skills only. The full plugin — MCP server and slash commands included — is Claude Code's format:
 
 ```
 /plugin marketplace add impire-io/impire-marketplace
 /plugin install hits@impire
 ```
 
+Then run `/hits:setup` once — the MCP server needs a hits context and an actor before it will boot.
+
 **Manual:** copy a folder from `skills/` into your agent's skills directory — `.claude/skills/` for Claude Code, `.agents/skills/` for most other agents.
 
 ## Plugins
 
-| Plugin | Skills | Teaches | Requires |
-|---|---|---|---|
-| `hits` | `hits-cli` | Operating [HITS](https://github.com/impire-io/hits) — headless, agent-native issue tracking — through the `hits` CLI. | The `hits` binary: `brew install impire-io/tap/hits` (the skill covers the alternatives). |
+| Plugin | Ships | Requires |
+|---|---|---|
+| `hits` | The `hits-mcp` MCP server (auto-resolved: `$HITS_MCP_BIN` → PATH → verified download of the pinned [hits](https://github.com/impire-io/hits) release), fourteen `/hits:*` lifecycle commands (`setup`, `status`, `file`, `find`, `work`, `claim`, `steal`, `release`, `note`, `block`, `unblock`, `link`, `resolve`, `wontfix`), and the `hits-cli` skill. | A reachable HITS fleet; `brew install impire-io/tap/hits` skips the download step. |
 
 ## Derivation
 
-This repo is a **derived view**: no contract is decided or first recorded here. Every skill declares its upstream sources in [`DERIVATION.md`](DERIVATION.md); skills restate decisions and semantics (stable) and never restate flag signatures (they drift — `hits <command> -h` is authoritative).
+This repo is a **derived view**: no contract is decided or first recorded here. Every published piece declares its upstream sources in [`DERIVATION.md`](DERIVATION.md); skills and commands restate decisions and semantics (stable) and never restate flag signatures (they drift — `hits <command> -h` is authoritative).
 
-Sync marker: last synced at `hits-hq` commit `9275898`.
+Sync marker: last synced at `hits-hq` commit `7476c6d`.
 
 ## License
 

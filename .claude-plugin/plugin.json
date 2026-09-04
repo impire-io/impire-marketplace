@@ -1,8 +1,8 @@
 {
   "name": "hits",
   "displayName": "HITS",
-  "description": "Operate HITS — headless, agent-native issue tracking — through the hits CLI.",
-  "version": "0.3.0",
+  "description": "Operate HITS — headless, agent-native issue tracking — through the hits-mcp tool surface, lifecycle slash commands, and the hits-cli skill.",
+  "version": "0.4.0",
   "author": {
     "name": "Impire",
     "url": "https://github.com/impire-io"
@@ -10,5 +10,5 @@
   "homepage": "https://github.com/impire-io/hits",
   "repository": "https://github.com/impire-io/impire-marketplace",
   "license": "LicenseRef-Sustainable-Use-1.0",
-  "keywords": ["hits", "issue-tracking", "nats", "cli"]
+  "keywords": ["hits", "issue-tracking", "nats", "mcp", "cli"]
 }

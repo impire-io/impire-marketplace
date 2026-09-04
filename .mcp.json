@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "hits": {
+      "command": "${CLAUDE_PLUGIN_ROOT}/scripts/hits-mcp.sh"
+    }
+  }
+}

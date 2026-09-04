@@ -4,7 +4,7 @@ description: Operate the HITS tracker with the `hits` CLI — file items, move t
 license: Sustainable Use License 1.0 (see LICENSE at the repo root)
 metadata:
   author: impire
-  version: "0.2.0"
+  version: "0.3.0"
 ---
 
 # hits-cli — using the hits client
@@ -27,6 +27,10 @@ Run `hits version`. This skill assumes a client **newer than v0.2.0**: standalon
 - Every write carries an **actor**: a stable lowercase handle (`daan`, `claude`) from `--actor`, `$HITS_ACTOR`, or `defaults.actor` in `~/.config/hits/config.json` (which also takes `defaults.context`). Set one before writing; commands without one are rejected.
 - `--json` for machine-readable output — prefer it when you are parsing.
 - No service running yet? `hits up` runs the whole fleet — hits-node plus the graph, search, and semantic indexes — in this process, in the foreground, against whatever NATS system the context points at.
+
+## Two surfaces, one client
+
+`hits-mcp` — installed alongside `hits` by every channel above — serves the same client surface as MCP tools: `create_item` through `graph_walk`, one tool per endpoint, the same invariants, replies as structured JSON. **When the hits MCP tools are connected, prefer them over shelling out** — same semantics, no output parsing, and read-only tools run without confirmation. Two asymmetries to know: setup stays on the CLI (contexts, auth, `hits up` — the server refuses to boot without a working context and an actor), and closing over MCP is `transition_item` to `resolved`/`wontfix` carrying the evidence — `hits resolve` and `hits wontfix` are CLI sugar for that same move.
 
 ## The model in one breath
 
