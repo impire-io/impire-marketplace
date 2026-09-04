@@ -29,7 +29,7 @@ npx skills add impire-io/impire-marketplace
 
 This repo is a **derived view**: no contract is decided or first recorded here. Every skill declares its upstream sources in [`DERIVATION.md`](DERIVATION.md); skills restate decisions and semantics (stable) and never restate flag signatures (they drift — `hits <command> -h` is authoritative).
 
-Sync marker: last synced at `hits-hq` commit `021758a`.
+Sync marker: last synced at `hits-hq` commit `41d40cf`.
 
 ## License
 
