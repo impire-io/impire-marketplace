@@ -4,7 +4,7 @@ description: Operate the HITS tracker with the `hits` CLI — file items, move t
 license: Sustainable Use License 1.0 (see LICENSE at the repo root)
 metadata:
   author: impire
-  version: "0.3.0"
+  version: "0.4.1"
 ---
 
 # hits-cli — using the hits client
