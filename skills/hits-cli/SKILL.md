@@ -9,7 +9,7 @@ metadata:
 
 # hits-cli — using the hits client
 
-HITS is a headless, agent-native issue tracker running on NATS; the `hits` binary is the terminal view of its full client surface. This skill teaches the semantics — the lifecycle and the flows, which are stable. Flag signatures drift: `hits <command> -h` is authoritative, and you should prefer it over anything you think you already know about the flags.
+HITS is a headless, agent-native issue tracker running on NATS; the `hits` binary is the terminal view of its full client surface. The platform tracks its own issues — its builders file, claim, work, and close their own items through these same flows. This skill teaches the semantics — the lifecycle and the flows, which are stable. Flag signatures drift: `hits <command> -h` is authoritative, and you should prefer it over anything you think you already know about the flags.
 
 ## First: check the binary
 
