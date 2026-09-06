@@ -13,7 +13,7 @@ HITS is a headless, agent-native issue tracker running on NATS; the `hits` binar
 
 ## First: check the binary
 
-Run `hits version`. This skill assumes a client **newer than v0.2.0**: standalone hits contexts and the `hits context` verbs. A v0.2.0-or-older client resolves nats CLI contexts directly and lacks those verbs — upgrade rather than adapt. If the command is missing, install it:
+Run `hits version`. This skill assumes a client **v0.5.0 or newer**: standalone hits contexts and the `hits context` verbs (post-v0.2.0), and project retirement (v0.5.0). An older client lacks part of this surface — upgrade rather than adapt. If the command is missing, install it:
 
 - **Homebrew (macOS/Linux):** `brew install impire-io/tap/hits`
 - **Prebuilt binaries:** https://github.com/impire-io/hits/releases — darwin, linux, and windows tarballs for amd64 and arm64
@@ -34,7 +34,7 @@ Run `hits version`. This skill assumes a client **newer than v0.2.0**: standalon
 
 ## The model in one breath
 
-Items are `bug` | `task` | `improvement`. Statuses: `open → diagnosing → located → resolved | wontfix`. A **bug** walks the localization stages (`located` requires a project in `located-in`); a **task** already knows its project — it must be created with `--project` and moves straight from `open` to a terminal status; an **improvement** takes either path depending on whether it was filed with a project. Projects are registered slugs (`hits project list`), never free text.
+Items are `bug` | `task` | `improvement`. Statuses: `open → diagnosing → located → resolved | wontfix`. A **bug** walks the localization stages (`located` requires a project in `located-in`); a **task** already knows its project — it must be created with `--project` and moves straight from `open` to a terminal status; an **improvement** takes either path depending on whether it was filed with a project. Projects are registered slugs (`hits project list`), never free text — and registration and retirement are their whole lifecycle. A mistyped or superseded slug is retired with a reason (`hits project retire`): it leaves the vocabulary but not history — `located-in` refuses it from then on, while items already naming it keep it and still close. A retired slug is never re-registered and never reused, and there is no rename: register the successor, re-point open items, retire the old slug.
 
 ## Flows
 
@@ -59,11 +59,14 @@ Items are `bug` | `task` | `improvement`. Statuses: `open → diagnosing → loc
 | A write is rejected for a missing actor | Set `--actor` or `$HITS_ACTOR` to a stable lowercase handle. |
 | `create --type task` is rejected | Tasks must be born located: add `--project <slug>`, registering the slug first if needed (`hits project register`). |
 | A transition is rejected | A lifecycle invariant blocked it: terminal statuses accept no transitions, and `--to located` requires a project. Re-read the model above. |
+| A write naming a project is refused `retired-project` | The slug is retired vocabulary — permanently. Point at its successor (`hits project list` shows the live slugs) or register one; never re-register the old slug. |
+| A report, note, or label is refused as over budget | Free text is budgeted — bodies 8 KiB, labels 1 KiB — and refused whole, never trimmed. Put the artifact in the repo or PR and reference it in the note. |
 
 ## Do not
 
 - Do not reopen a terminal item — file a new one and `link` it if related.
 - Do not edit or rewrite the trail; notes are append-only history.
 - Do not tombstone a real item — `tombstone` voids filing mistakes (a duplicate filed in error, a test record) and nothing else.
-- Do not invent project slugs; `located-in` accepts registered projects only.
+- Do not invent project slugs; `located-in` accepts live, registered projects only — retired slugs are refused and never reused.
+- Do not paste logs or large artifacts into notes — bodies are budgeted (8 KiB) and refused whole when over; the artifact belongs in the repo or PR, its reference in the note.
 - Do not restate flag lists from this skill elsewhere — point at `hits <command> -h`.
