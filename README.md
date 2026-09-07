@@ -31,7 +31,7 @@ Then run `/hits:setup` once — the MCP server needs a hits context and an actor
 
 This repo is a **derived view**: no contract is decided or first recorded here. Every published piece declares its upstream sources in [`DERIVATION.md`](DERIVATION.md); skills and commands restate decisions and semantics (stable) and never restate flag signatures (they drift — `hits <command> -h` is authoritative).
 
-Sync marker: last synced at `hits-hq` commit `282ad40`.
+Sync marker: last synced at `hits-hq` commit `56c6b21`.
 
 ## License
 
