@@ -11,14 +11,16 @@
 # Any failure exits 1 with the manual install options; a failed download or
 # verification never leaves a cached binary behind.
 #
-# hits-mcp itself is fail-fast: it needs a hits context and an actor
-# (defaults in ~/.config/hits/config.json, or $HITS_ACTOR) and a reachable
-# fleet, or it refuses to serve. /hits:setup walks through all of that.
+# hits-mcp itself is fail-fast: it needs a chronicle context that dials —
+# the selected one, saved by chronicle's own CLI (chronicle login, or
+# chronicle context add) — and a store that holds HITS's types, or it
+# refuses to serve. There is no actor: the author of every write is the
+# context's principal. /hits:setup walks through all of that.
 set -euo pipefail
 
 # The hits release this plugin version is paired with. Bump alongside the
 # plugin version in .claude-plugin/plugin.json.
-HITS_VERSION="0.6.2"
+HITS_VERSION="0.8.0"
 
 manual_help() {
   cat >&2 <<'EOF'
