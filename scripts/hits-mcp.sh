@@ -20,7 +20,7 @@ set -euo pipefail
 
 # The hits release this plugin version is paired with. Bump alongside the
 # plugin version in .claude-plugin/plugin.json.
-HITS_VERSION="0.8.0"
+HITS_VERSION="0.8.1"
 
 manual_help() {
   cat >&2 <<'EOF'

@@ -13,7 +13,7 @@ HITS is a headless, agent-native issue tracker. A HITS is one store in a chronic
 
 ## First: check the binary
 
-Run `hits version`. This skill assumes a client **v0.8.0 or newer** — the release that runs on chronicle. An older client connects through hits contexts to a service fleet that the shared install no longer runs; upgrade rather than adapt. If the command is missing, install it:
+Run `hits version`. This skill assumes a client **v0.8.1 or newer** — the release that runs on chronicle. An older client connects through hits contexts to a service fleet that the shared install no longer runs; upgrade rather than adapt. If the command is missing, install it:
 
 - **Homebrew (macOS/Linux):** `brew install impire-io/tap/hits` — installs `hits` and `hits-mcp` together
 - **Prebuilt binaries:** https://github.com/impire-io/hits/releases — one archive per platform (darwin, linux, windows; amd64, arm64) carrying both binaries and `install.json`, the store manifest; `checksums.txt` beside the archives
@@ -85,6 +85,6 @@ Who did what is not a vocabulary: `reporter` and `claimed-by` are the principals
 - Do not tombstone a real item — `tombstone` voids filing mistakes (a duplicate filed in error, a test record) and nothing else.
 - Do not invent project, initiative, or release slugs; `located-in`, filing, and `target` accept live, registered vocabulary only — retired and shipped slugs are refused and never reused.
 - Do not look for an actor to set, and do not try to write as somebody else — the author is the context's principal. An agent writes as its own service account, on its own context.
-- Do not run `hits migrate`. It exists in release 0.8.0 alone, for the one cutover a person runs on the day; 0.9.0 removes it.
+- Do not run `hits migrate`. It exists in the 0.8 releases alone, for the one cutover a person runs on the day; 0.9.0 removes it.
 - Do not paste logs or large artifacts into notes — bodies are budgeted (8 KiB) and refused whole when over; the artifact belongs in the repo or PR, its reference in the note.
 - Do not restate flag lists from this skill elsewhere — point at `hits <command> -h`.
