@@ -1,6 +1,6 @@
 # impire-marketplace
 
-Agent skills and plugins for Impire products. Skills follow the open [Agent Skills](https://agentskills.io) standard — self-contained `skills/<name>/SKILL.md` folders — and the repo doubles as a [Claude Code plugin marketplace](https://code.claude.com/docs/en/plugin-marketplaces), so one repo serves every agent.
+Agent skills and plugins for Impire products. The root is the marketplace; each product's plugin lives under `plugins/<name>/`. Skills follow the open [Agent Skills](https://agentskills.io) standard — self-contained `plugins/<plugin>/skills/<name>/SKILL.md` folders — and the repo doubles as a [Claude Code plugin marketplace](https://code.claude.com/docs/en/plugin-marketplaces), so one repo serves every agent.
 
 ## Install
 
@@ -20,7 +20,7 @@ This installs the skills only — `skills.sh.json` names every skill directory, 
 
 `impire` needs nothing but the Impire terminal client signed in (`impire login <workspace>`), or the console. For `hits`, run `/hits:setup` once — the MCP server boots on one context that dials, and the context chooses the substrate: a chronicle context, where the author of every write is the context's principal and there is no actor to set; or a hits context of a 0.7 fleet, where the actor is set once (`HITS_ACTOR`, or the hits config's default).
 
-**Manual:** copy a skill folder — `skills/hits-cli`, `plugins/impire/skills/impire-agents` — into your agent's skills directory — `.claude/skills/` for Claude Code, `.agents/skills/` for most other agents.
+**Manual:** copy a skill folder — `plugins/hits/skills/hits-cli`, `plugins/impire/skills/impire-agents` — into your agent's skills directory — `.claude/skills/` for Claude Code, `.agents/skills/` for most other agents.
 
 ## Plugins
 

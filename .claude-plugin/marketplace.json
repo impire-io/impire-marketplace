@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "hits",
-      "source": "./",
+      "source": "./plugins/hits",
       "description": "Operate HITS — headless, agent-native issue tracking — through the hits-mcp tool surface, lifecycle slash commands, and the hits-cli skill.",
       "version": "0.10.0",
       "homepage": "https://github.com/impire-io/hits",

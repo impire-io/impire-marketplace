@@ -1,4 +1,7 @@
 {
   "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
-  "paths": ["./plugins/impire/skills"]
+  "paths": [
+    "./plugins/hits/skills",
+    "./plugins/impire/skills"
+  ]
 }
