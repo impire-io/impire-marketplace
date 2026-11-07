@@ -33,7 +33,7 @@ This installs the skills only — `skills.sh.json` names every skill directory, 
 
 This repo is a **derived view**: no contract is decided or first recorded here. Every published piece declares its upstream sources in [`DERIVATION.md`](DERIVATION.md); skills and commands restate decisions and semantics (stable) and never restate flag signatures (they drift — `hits <command> -h` and `impire <group> <verb> -h` are authoritative).
 
-Sync markers: `hits` last synced at `hits-hq` commit `ad4f6c4`; `impire` last synced at `impire-hq` commit `23b0164`.
+Sync markers: `hits` last synced at `hits-hq` commit `ad4f6c4`; `impire` last synced at `impire-hq` commit `3e6e489`.
 
 ## License
 
