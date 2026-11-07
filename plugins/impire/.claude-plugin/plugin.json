@@ -1,0 +1,14 @@
+{
+  "name": "impire",
+  "displayName": "Impire",
+  "description": "Build on the Impire platform — add and operate agents in a workspace through the impire-agents skill.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Impire",
+    "url": "https://github.com/impire-io"
+  },
+  "homepage": "https://console.impire.io",
+  "repository": "https://github.com/impire-io/impire-marketplace",
+  "license": "LicenseRef-Sustainable-Use-1.0",
+  "keywords": ["impire", "agents", "workspace", "nats", "cli"]
+}

@@ -1,6 +1,6 @@
 # Derivation
 
-The upstream sources each published piece is derived from, per `hits-hq` playbook 06 (builder-skill sync). A piece with no row here cannot be kept current and is not published.
+The upstream sources each published piece is derived from, per the owning hq's playbook 06 (builder-skill sync) — `hits-hq` for the `hits` plugin, `impire-hq` for the `impire` plugin. A piece with no row here cannot be kept current and is not published.
 
 | Piece | Upstream repo | Path | What it takes |
 |---|---|---|---|
@@ -18,3 +18,8 @@ The upstream sources each published piece is derived from, per `hits-hq` playboo
 | `commands/setup` | `hits-hq` | `02-DESIGN/the-client.md`, `02-DESIGN/the-cutover.md` | The first-run path on either substrate: a chronicle context and no actor, or a hits context with an actor; the store declared once per chronicle account; `hits ping` and a read as the verification — nothing to start. |
 | `.mcp.json`, `scripts/hits-mcp.sh` | `hits-hq` | `02-DESIGN/mcp-server.md` | That `hits-mcp` is a per-agent stdio process on one context of either family — the selection, or the one it is started with — taking the actor at startup on a hits context (`HITS_ACTOR` passed through) and none on a chronicle context, refusing to serve when the context does not dial. |
 | `scripts/hits-mcp.sh` | `hits` | releases (`checksums.txt`), `.goreleaser.yaml` | Archive naming and checksum verification for the pinned release download; the pin (`HITS_VERSION`) bumps with the plugin version. |
+| `plugins/impire/skills/impire-agents` | `impire-hq` | `03-DECISIONS/0091-an-agent-is-a-workload-told-what-to-do-by-a-document-and-fired-by-its-triggers.md` | What an agent is: a workload on the platform's agent image plus a document in words; event-driven, not a loop; the runtime/harness boundary; fresh runs; the private record; no plan feature. |
+| `plugins/impire/skills/impire-agents` | `impire-hq` | `02-DESIGN/22-agents/01-the-agent.md` | The document's fields and what the runtime validates; `acts` and whom a run is made as; the agent's store and who reads it; enabled/disabled semantics; what this increment does not do. |
+| `plugins/impire/skills/impire-agents` | `impire-hq` | `02-DESIGN/22-agents/02-triggers.md` | The four trigger kinds, what fires each and whom the run acts for; own writes never fire; coalescing; catch-up once after an absence; the events family and its retention; schedules by the bus with the agent's clock as judge; firing by hand; reserved names. |
+| `plugins/impire/skills/impire-agents` | `impire-hq` | `02-DESIGN/22-agents/03-a-run.md` | A run's opening, endings and bounds; one run at a time; hand-over on a lost placement; the platform's harness rules (identical turn not run, failed call in words, turns written, fresh start); the tools the model sees; escalations addressed to admins and granted calls as new events; the record's four types. |
+| `plugins/impire/skills/impire-agents` | `impire-hq` | `02-DESIGN/22-agents/04-the-agents-surface.md` | The status words and their order; what a member and an admin see; Add an agent's order and the half-made agent; Stop/Start/Delete semantics; the terminal client's verbs by name. Flag signatures are pointed at (`impire agents <verb> -h`), never restated. |
