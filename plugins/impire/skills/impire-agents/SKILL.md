@@ -4,12 +4,12 @@ description: Add and operate an agent in an Impire workspace — write its docum
 license: Sustainable Use License 1.0 (see LICENSE at the repo root)
 metadata:
   author: impire
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # impire-agents — adding and operating an agent
 
-An Impire **agent** is a process with its own identity that acts on events by calling inference and toolkits, keeps its own state, and answers to the workspace that owns it. Nobody writes code to have one: an agent is one **workload** of the workspace, running the platform's **agent image**, made into *this* agent by a **document** an admin writes in words, fired by its **triggers**, and recorded run by run in a **store of its own**. This skill teaches the semantics — what the document says, what fires an agent, what a run is, whom its calls are made as, and what each status word means — which are stable. Command flags drift: `impire agents <verb> -h` is authoritative, and you should prefer it over anything you remember about the flags.
+An Impire **agent** is a process with its own identity that acts on events by calling inference and toolkits, keeps its own state, and answers to the workspace that owns it. Nobody writes code to have one: an agent is one **workload** of the workspace, running the platform's **agent image**, made into *this* agent by a **document** an admin writes in words, fired by its **triggers**, and recorded run by run under a **namespace of its own** in the workspace's one `agents` store. This skill teaches the semantics — what the document says, what fires an agent, what a run is, whom its calls are made as, and what each status word means — which are stable. Command flags drift: `impire agents <verb> -h` is authoritative, and you should prefer it over anything you remember about the flags.
 
 An agent is **event-driven and not a loop**. An event makes it act, and the event is where the platform's contract ends; what handles the event — the harness — works inside however it works. Nothing runs an agent that nothing has fired, and an agent does not poll, wait or wake itself.
 
@@ -33,7 +33,7 @@ The document is the agent. It is the workload's settings document in the configu
 | `model` | the workspace's name for the model it thinks with |
 | `params` | the sampling parameters it asks the model with, in the inference contract's names |
 | `toolkits` | the toolkits it may call; each tool is offered to the model as `<toolkit>__<tool>`, declared exactly as the toolkit declares it |
-| `stores` | a list of `{name, write}` — the stores it may read, and which it may write. Its own store is never listed and is always both |
+| `stores` | a list of `{name, write}` — the workspace's stores it may read, and which it may write. Its own namespace in the `agents` store is never listed and is always both |
 | `triggers` | a list; each has a `name`, a `kind`, the kind's parameters, and its own `instructions` — what to do when it fires |
 
 One document, in its own form:
@@ -72,7 +72,7 @@ triggers:
 
 **Changing it.** Save the document again — the *Settings* tab, or `impire agents set <agent> <file>`. The change is applied without a restart and takes effect at the agent's **next event**: a run in flight finishes under the document it started with; triggers added are held from then on, triggers removed fire no more.
 
-**No memory, no knowledge — yet.** Every run starts fresh. What an agent knows from before is what it wrote down: a note in its own store, or the workspace's own things in the stores it may read. Memory and knowledge are features to come, and will be hooked in by a field added to this document.
+**No memory, no knowledge — yet.** Every run starts fresh. What an agent knows from before is what it wrote down: a note in its namespace of the `agents` store, or the workspace's own things in the stores it may read. Memory and knowledge are features to come, and will be hooked in by a field added to this document.
 
 ## Whom the agent acts as
 
@@ -120,7 +120,7 @@ The harness asks the document's model with the agent's instructions, the trigger
 
 - **A turn identical to the previous one is not run**, checked **before** its calls are executed — a model that has finished sometimes repeats its closing turn with the calls it already made attached, and a repeated call may be a write. The run ends `done` with the model's words.
 - **A failed call is given back in the tool's own words** — a refusal, a toolkit's error, a store's refusal — and the run goes on; the model decides what to do with it.
-- **Every turn is written as it happens** to the agent's own store, so the agent's page shows it, and a second handing-over continues from what was written.
+- **Every turn is written as it happens** to the agent's namespace in the `agents` store, so the agent's page shows it, and a second handing-over continues from what was written.
 - **Every run starts fresh.** The harness carries nothing from one run to the next.
 
 The tools the model sees are exactly these — write your instructions with them in mind:
@@ -129,7 +129,7 @@ The tools the model sees are exactly these — write your instructions with them
 |---|---|
 | each tool of each toolkit in `toolkits` | `<toolkit>__<tool>`, with the toolkit's own description and schema, unchanged |
 | the state tools, for each store in `stores` | `state_get`, `state_list`, `state_history`, and `state_apply` where the store is marked `write`; the store's name is a parameter, and an operation's body is the store's type's |
-| the agent's notes | `note_write`, `note_read` — a key and a text, kept in the agent's own store across runs; this is the one way an agent remembers |
+| the agent's notes | `note_write`, `note_read` — a key and a text, kept under the agent's namespace in the `agents` store across runs; this is the one way an agent remembers |
 
 ### A call a rule escalates
 
@@ -139,7 +139,7 @@ In a run that acts **for its caller**, the crossing is the caller's, addressed a
 
 ## Adding, operating, deleting
 
-**Add an agent** (the console's form, or `impire agents add <file>` with the document) composes, in this order: the workload's registration on the platform's agent image, with the agent's name, one replica and no egress; the agent's private store, named after the agent, with the agent as its owner, and the record's four types; then the document. A failure midway is shown where it happened and **what was created stays** — an agent the table shows *not configured*. Save again, or `agents add` again with the same name, **completes what is missing**: the console reads before it writes and creates nothing twice. Nothing is rolled back. An agent **is not ready** until the store, its types and the document are all there.
+**Add an agent** (the console's form, or `impire agents add <file>` with the document) composes, in this order: the workload's registration on the platform's agent image, with the agent's name, one replica and no egress; the workspace's **`agents` store, once** — where none exists yet it is created, scoped by workload, with the record's four types; every add after the first finds it there and shows the step as *there*; then the document. Nothing is created per agent but its registration and its document — there is no store per agent, no owner. A failure midway is shown where it happened and **what was created stays** — an agent the table shows *not configured*. Save again, or `agents add` again with the same name, **completes what is missing**: the console reads before it writes and creates nothing twice. Nothing is rolled back. An agent **is not ready** until the `agents` store, its four types and the agent's document are all there — a workspace whose `agents` store is missing shows every agent *not configured*, saying so.
 
 **The registration** is the platform's: the agent image, pinned by the install and followed when the install moves it; one replica; **no egress** — the agent reaches the bus and nothing else, and an external system is a toolkit's to reach; the install's default resources or what the admin chose. An agent counts against the workspace's workload, vCPU and memory limits as one workload and is no plan feature of its own.
 
@@ -158,7 +158,7 @@ A member sees the agents that are up as *available*; a stopped or not-yet-config
 
 **Stop** and **Start** (`impire agents suspend <agent>`, `impire agents resume <agent>`) are the workload's emergency stop and its reversal. **Stop** destroys the placement: an open run is closed `stopped` and not taken up again, the agent's schedules end, its subject messages stop being delivered, and nothing is kept for it while it is stopped. **Start** boots it: it reads its document and its cursors, declares what it listens for, and **catches up once** — each instance that changed under a watched path while it was away, once, in its state now; each schedule from its next time, never for the times missed; nothing of the messages published on its subjects meanwhile. Stop and start is also how an admin lifts a pause.
 
-**Delete** (`impire agents delete <agent>`, which asks unless told not to) retires the registration, deletes the document and deletes the agent's store — *its runs and notes are deleted with it; the calls it made stay in the workspace's records*. The registration stays, retired, so the records keep their attribution.
+**Delete** (`impire agents delete <agent>`, which asks unless told not to) retires the registration and deletes the document; **nothing in the `agents` store is deleted** — *its runs and notes stay under the retired id, readable by admins and written by nobody; the calls it made stay in the workspace's records*. The registration stays, retired, so the records keep their attribution. A store's size is what bounds the record of retired agents; an admin who needs the room raises the store's sizes or compacts it, as with any store.
 
 **The terminal client's group**, verb by verb — `impire agents <verb> -h` for the flags:
 
@@ -166,7 +166,7 @@ A member sees the agents that are up as *available*; a stopped or not-yet-config
 - `agents add <file>` — the document from a file; prints the workload id; finishes a half-made agent when run again.
 - `agents get <agent>` — the registration's status, the document, the triggers with when each last fired.
 - `agents set <agent> <file>` — replace the document.
-- `agents runs <agent>`, `agents run <agent> <run>` — the runs, newest first; one run with its turns; `--follow` on an open run.
+- `agents runs <agent>`, `agents run <agent> <run>` — an admin's: the runs, newest first; one run with its turns; `--follow` on an open run. A member has no namespace in `agents` and is offered neither.
 - `agents send <agent> <trigger> <text>` — a request; the reply's frames to standard output as they arrive.
 - `agents fire <agent> <trigger> [<file>]` — fire a state, subject or schedule trigger by hand.
 - `agents suspend <agent>`, `agents resume <agent>` — stop, start.
@@ -176,9 +176,17 @@ A member sees the agents that are up as *available*; a stopped or not-yet-config
 
 ## The record
 
-Every agent has a store of its own, **`agent-<name>`**, created with it and deleted with it, and **private**: the agent reads and writes it, the workspace's **admins** read it (the agent's page is read from it), and a member and every other workload reach nothing in it — the broker refuses them, and no service checks anything more. It holds, under four types: `run/<run>` — the trigger and its kind, the event or its digest, who sent it where someone did, whom the run acts for, when it opened and ended and how, how often it was handed over, whether an admin fired it by hand, and each kept call while its crossing is open; `run/<run>/turn/<n>` — the model's text, each call with its arguments, each result, in order; `cursor/<trigger>` — where each state trigger has read to and when each schedule last fired; `note/<key>` — what the model chose to remember.
+All of a workspace's agents keep their records in **one store, `agents`** — created once, by whichever admin adds the first agent, with four types, and never per agent. It is a **scoped store**, scoped by workload: every path in it begins with a **namespace**, the agent's workload id, and the agent never writes that namespace — it writes `run/<run>`, `run/<run>/turn/<n>`, `cursor/<trigger>` and `note/<key>`, and the state service prefixes the namespace it reads from the agent's own verified identity, so the store holds `<id>/run/<run>`. An agent can address no namespace but its own: the plain store verbs are always the caller's own namespace, and a list answers only it. The workspace's **admins** read every namespace — the agent's page and `impire agents runs` / `run` are such reads — on a read-only family of verbs their template alone admits. A **member** and every **workload that is not an agent** reach nothing in `agents`. No tag is written on anyone's connection, no connection is kicked when an agent is added, and the state service checks nothing by role: who may reach what is the broker's allow lists plus one rule — the namespace is the caller's identity.
 
-The record the workspace **always** has, whatever the harness, is the calls: every model asked and every tool called is in the workspace's own records under the agent's name, as every workload's calls are. An agent's own store is never one of the stores it watches.
+The four types: `run/<run>` — the trigger and its kind, the event or its digest, who sent it where someone did, whom the run acts for, when it opened and ended and how, how often it was handed over, whether an admin fired it by hand, and each kept call while its crossing is open; `run/<run>/turn/<n>` — the model's text, each call with its arguments, each result, in order; `cursor/<trigger>` — where each state trigger has read to and when each schedule last fired; `note/<key>` — what the model chose to remember.
+
+The record the workspace **always** has, whatever the harness, is the calls: every model asked and every tool called is in the workspace's own records under the agent's name, as every workload's calls are. The `agents` store is never one of the stores an agent watches, and it declares no index: a scoped store has none, so there is no search across the record — an admin browses it one namespace at a time (the console's Stores page lists the namespaces; `impire stores namespaces agents`, and `--namespace <id>` on the items commands, do the same in the terminal).
+
+## Stores, as far as agents touch them
+
+- **A store is regular or scoped.** A regular store is the workspace's — every member and workload reads and writes it, and it is what an agent's `stores` list names. A scoped store (`workload` or `person`) gives every caller a namespace of its own, judged from the caller's identity; `agents` is the one the platform makes. An admin creates either kind; the scope is fixed at creation.
+- **A store has one size and shows two fills.** Its **size** caps one stream that holds both the log — the history of changes — and the state: the current state of every item is one message in the same stream, replaced in place each time the fold moves (decision 0095). The console and `impire stores list` / `get` show *log 171 KiB and state 171 KiB of 256 MiB* — the two fills against the one size — with *near full* and *full* on the whole. A full store refuses new changes naming its size; a `compactable` store makes room by rolling up old changes, a `full` one never loses a change. Flags: `impire stores <verb> -h`.
+- **For developers using the SDKs**: every reply of the state family carries `Impire-State-Folded`, the sequence the store's index has reached, so a reader can see how far behind the log it is; `get`, `list` and `watch` take `Impire-State-Min-Seq` and are answered once the index has reached that sequence, or refused `timeout` naming where it stood; a write (`apply`) is answered once its own change is folded, so the writer's next read is exact. A scoped store refuses `index.declare` and `index.query`. The admin's cross-namespace reads are the `scoped` family — `state.scoped.get`, `history`, `watch`, `list` and `namespaces` — with client methods of the same names in both SDKs.
 
 ## Writing good instructions
 
@@ -195,8 +203,8 @@ Do not promise these: a **brought harness** (your own harness image handed the e
 
 ## For developers
 
-The SDKs carry the agent's contract so that a client or a tool can speak it without restating it: the document's shape and its validation, the reserved trigger names, the record's four types in the order a surface defines them, how a run's id and a schedule's due time are derived, and the fire-by-hand subject — the `agent` package of `impire-sdk-go` and the `agent` module of `impire-sdk-js`. Read those for signatures; this skill states only the semantics they implement.
+The SDKs carry the agent's contract so that a client or a tool can speak it without restating it: the document's shape and its validation, the reserved trigger names, the `agents` store's name and the record's four types in the order a surface defines them, the record's path helpers (which take no namespace — the service prefixes it), how a run's id and a schedule's due time are derived, and the fire-by-hand subject — the `agent` package of `impire-sdk-go` and the `agent` module of `impire-sdk-js`; the store's scope, its two sizes and fills, the fold headers and the `scoped` family are in their `state` packages. Read those for signatures; this skill states only the semantics they implement.
 
 ## Sources
 
-Derived from the Impire hq's design, which is authoritative where this skill and the platform disagree: `02-DESIGN/22-agents/01-the-agent.md` (the agent, the document, whom it acts as, the store, enabled and disabled), `02-triggers.md` (the four kinds, catching up, firing by hand), `03-a-run.md` (a run, the harness, the bounds, escalations, the record), `04-the-agents-surface.md` (the page, the form, the statuses, the verbs), and decision `0091`. See `DERIVATION.md` at the repo root.
+Derived from the Impire hq's design, which is authoritative where this skill and the platform disagree: `02-DESIGN/22-agents/01-the-agent.md` (the agent, the document, whom it acts as, the store, enabled and disabled), `02-triggers.md` (the four kinds, catching up, firing by hand), `03-a-run.md` (a run, the harness, the bounds, escalations, the record), `04-the-agents-surface.md` (the page, the form, the statuses, the verbs), `02-DESIGN/10-state/01-stores-types-and-instances.md` (regular and scoped stores, the size and the state size, who may do what), and decisions `0091`, `0093` and `0094`. See `DERIVATION.md` at the repo root. Decision `03-DECISIONS/0095-…` puts the state in the log's stream and gives a store one size.
